@@ -1,7 +1,9 @@
+import { useCallback } from 'react';
+import Dropzone, { useDropzone } from 'react-dropzone';
 import {Form, Formik, useField} from 'formik';
 import * as Yup from 'yup';
-import {Alert, AlertIcon, Box, Button, FormLabel, Input, Select, Stack} from "@chakra-ui/react";
-import {saveCustomer, updateCustomer} from "../../services/client.js";
+import {Alert, AlertIcon, Box, Button, FormLabel, Input, Select, Stack, VStack, Image} from "@chakra-ui/react";
+import {saveCustomer, updateCustomer, uploadCustomerProfilePicture} from "../../services/client.js";
 import {successNotification, errorNotification} from "../../services/notification.js";
 
 const MyTextInput = ({label, ...props}) => {
@@ -23,10 +25,56 @@ const MyTextInput = ({label, ...props}) => {
     );
 };
 
+const MyDropzone = ({ customerId }) => {
+    const onDrop = useCallback(acceptedFiles => {
+        const formData = new FormData();
+        formData.append("file", acceptedFiles[0]);
+
+        uploadCustomerProfilePicture(
+            customerId,
+            formData
+        ).then((res) => {
+            successNotification("Success", "Profile picture uploaded");
+        }).catch((err) => {
+            errorNotification("Error", "Profile picture failed upload");
+            console.log(err);
+        })
+    }, [])
+    const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
+  
+    return (
+      <Box {...getRootProps()}
+        w={'100%'}
+        textAlign={'center'}
+        border={'dashed'}
+        borderColor={'gray.200'}
+        p={6}
+        rounded={'md'}
+        borderRadius={'3xl'}
+      >
+        <input {...getInputProps()} />
+        {
+          isDragActive ?
+            <p>Drop the picture here ...</p> :
+            <p>Drag 'n' drop picture here, or click to select picture</p>
+        }
+      </Box>
+    )
+  }
+
 // And now we can use these
 const UpdateCustomerForm = ({ fetchCustomers, initialValues, customerId }) => {
     return (
         <>
+            <VStack spacing={'5'} mb={'5'}>
+                <Image
+                    borderRadius={'full'}
+                    boxSize={'150px'}
+                    objectFit={'cover'}
+                    src={''} 
+                />
+                <MyDropzone customerId={customerId} />
+            </VStack>            
             <Formik
                 initialValues={initialValues}
                 validationSchema={Yup.object({
