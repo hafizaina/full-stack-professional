@@ -61,7 +61,7 @@ public class Customer implements UserDetails {
     )
     private String password;
 
-    @Column (
+    @Column(
             unique = true
     )
     private String profileImageId;
@@ -90,8 +90,8 @@ public class Customer implements UserDetails {
                     Integer age,
                     Gender gender,
                     String profileImageId) {
-        this(id, name, email, password, age, gender);
-        this.profileImageId = profileImageId;
+       this(id, name, email, password, age, gender);
+       this.profileImageId = profileImageId;
     }
 
     public Customer(String name,
