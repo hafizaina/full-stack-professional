@@ -131,7 +131,7 @@ public class CustomerService {
                     file.getBytes()
             );
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("failed to upload profile image", e);
         }
 
         // Store profileImageId to postgres db
@@ -146,7 +146,7 @@ public class CustomerService {
                 ));
 
         //  Check if profileImageId is empty or null
-        if(customer.profileImageId().isBlank()) {
+        if(customer.profileImageId() == null || customer.profileImageId().isBlank()) {
             throw new ResourceNotFoundException("customer with id [%s] profile image not found".formatted(customerId));
         }
 

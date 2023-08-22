@@ -28,13 +28,13 @@ public class S3Service {
     }
 
     public byte[] getObject(String bucketName, String key) {
-        GetObjectRequest objectRequest = GetObjectRequest
+        GetObjectRequest getObjectRequest = GetObjectRequest
                 .builder()
                 .key(key)
                 .bucket(bucketName)
                 .build();
 
-        ResponseInputStream<GetObjectResponse> res = s3.getObject(objectRequest);
+        ResponseInputStream<GetObjectResponse> res = s3.getObject(getObjectRequest);
 
         try {
             return res.readAllBytes();

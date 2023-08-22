@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Random;
+import java.util.UUID;
 
 @SpringBootApplication
 public class Main {
@@ -35,11 +36,11 @@ public class Main {
     private static void testBucketUploadAndDownload(S3Service s3Service, S3Buckets s3Buckets) {
         s3Service.putObject(
                 s3Buckets.getCustomer(),
-            "foo",
-            "Hello World".getBytes()
+                "foo/bar/jamila",
+                "Hello World".getBytes()
         );
 
-        byte[] obj = s3Service.getObject("fs-amigoscode-customer-hafiz-test", "foo");
+        byte[] obj = s3Service.getObject(s3Buckets.getCustomer(), "foo");
 
         System.out.println("Hooray: " + new String(obj));
     }
